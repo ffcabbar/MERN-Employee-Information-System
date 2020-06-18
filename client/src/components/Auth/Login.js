@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Axios from "axios";
+import UserContext from "../../context/UserContext";
+import { useHistory } from "react-router-dom";
 
 const Copyright = () => {
   return (
@@ -46,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", 
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -56,6 +59,32 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  const { setUserData } = useContext(UserContext);
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    const loginUser = { email, password };
+    await Axios.post("http://localhost:5000/users/login", loginUser);
+
+    const loginRes = await Axios.post(
+      "http://localhost:5000/users/login",
+      loginUser
+    );
+
+    setUserData({
+      token: loginRes.data.token,
+      user: loginRes.data.user,
+    });
+
+    localStorage.setItem("auth-token", loginRes.data.token);
+    history.push("/");
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,7 +96,8 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form className={classes.form} noValidate>
+
+        <form onSubmit={submit} className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -78,6 +108,7 @@ const Login = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -89,6 +120,7 @@ const Login = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -104,14 +136,6 @@ const Login = () => {
             Login
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link
-                href="#"
-                style={{ color: "#3f51b5", textDecoration: "none" }}
-              >
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link
                 to="/register"
@@ -123,6 +147,7 @@ const Login = () => {
           </Grid>
         </form>
       </div>
+
       <Box mt={8}>
         <Copyright />
       </Box>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Axios from "axios";
+import UserContext from "../../context/UserContext";
+import { useHistory } from "react-router-dom";
 
 const Copyright = () => {
   return (
@@ -56,6 +59,34 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [passwordCheck, setPasswordCheck] = useState();
+  const [displayName, setDisplayName] = useState();
+
+  const { setUserData } = useContext(UserContext);
+
+  const submit = async (e) => {
+    e.preventDefault();
+
+    const newUser = { email, password, passwordCheck, displayName };
+    await Axios.post("http://localhost:5000/users/register", newUser);
+
+    const loginRes = await Axios.post("http://localhost:5000/users/login", {
+      email,
+      password,
+    });
+
+    setUserData({
+      token: loginRes.data.token,
+      user: loginRes.data.user,
+    });
+
+    localStorage.setItem("auth-token", loginRes.data.token);
+    history.push("/");
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,7 +98,8 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
-        <form className={classes.form} noValidate>
+
+        <form onSubmit={submit} className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
@@ -76,8 +108,9 @@ const Register = () => {
                 variant="outlined"
                 fullWidth
                 id="userName"
-                label="UserName"
+                label="User Name"
                 autoFocus
+                onChange={(e) => setDisplayName(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -89,6 +122,7 @@ const Register = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -101,6 +135,7 @@ const Register = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -110,9 +145,10 @@ const Register = () => {
                 fullWidth
                 name="repassword"
                 label="Re-Password"
-                type="repassword"
+                type="password"
                 id="repassword"
                 autoComplete="current-password"
+                onChange={(e) => setPasswordCheck(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -143,6 +179,7 @@ const Register = () => {
           </Grid>
         </form>
       </div>
+
       <Box mt={5}>
         <Copyright />
       </Box>

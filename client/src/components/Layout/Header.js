@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import UserContext from "../../context/UserContext";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -18,21 +19,47 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const classes = useStyles();
 
+  const { userData, setUserData } = useContext(UserContext);
+
+  const logoutUser = () => {
+    setUserData({
+      token: undefined,
+      user: undefined,
+    });
+
+    localStorage.setItem("auth-token", "");
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link to="/" style={{ textDecoration: 'none', color: "#fff" }}>
-                Furkan
+            <Link to="/" style={{ textDecoration: "none", color: "#fff" }}>
+              Furkan
             </Link>
           </Typography>
-          <Link to="/login" style={{ textDecoration: 'none', color: "#fff"  }}>
-            <Button color="inherit">Login</Button>
-          </Link>
-          <Link to="/register" style={{ textDecoration: 'none', color: "#fff" }}>
-            <Button color="inherit">Register</Button>
-          </Link>
+          {userData.user ? (
+            <Button color="inherit" onClick={logoutUser}>
+              Logout
+            </Button>
+          ) : (
+            <>
+              {" "}
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "#fff" }}
+              >
+                <Button color="inherit">Login</Button>
+              </Link>
+              <Link
+                to="/register"
+                style={{ textDecoration: "none", color: "#fff" }}
+              >
+                <Button color="inherit">Register</Button>
+              </Link>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </div>
