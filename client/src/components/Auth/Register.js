@@ -85,7 +85,7 @@ const Register = () => {
     });
 
     localStorage.setItem("auth-token", loginRes.data.token);
-    history.push("/");
+    history.push("/login");
   };
 
   return (
