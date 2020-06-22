@@ -17,14 +17,8 @@ import {
   ListItemText,
   Button,
 } from "@material-ui/core";
-import {
-  Menu,
-  ChevronLeft,
-  ChevronRight,
-  Inbox
-} from "@material-ui/icons";
-import User from "../../components/User/User";
-import User2 from "../../components/User/User2";
+import { Menu, ChevronLeft, ChevronRight, Person, AssignmentInd, PersonPinCircle, School, ContactPhone } from "@material-ui/icons";
+import {UserInfo,PersonelInfo,AddressInfo,EducationInfo,ContactInfo} from '../User/index'
 
 const drawerWidth = 240;
 
@@ -114,27 +108,51 @@ export default function Header() {
     localStorage.setItem("auth-token", "");
   };
 
-  const showUser = () => {
-    setShow("user");
+  const showUserInfo = () => {
+    setShow("userinfo");
   };
 
-  const showUser2 = () => {
-    setShow("user2");
+  const showPersonelInfo = () => {
+    setShow("personelinfo");
+  };
+
+  const showAddressInfo = () => {
+    setShow("addressinfo");
+  };
+
+  const showEducationInfo = () => {
+    setShow("educationinfo");
+  };
+
+  const showContactInfo = () => {
+    setShow("contactinfo");
   };
 
   let content = null;
 
   switch (show) {
-    case "user":
-      content = <User />;
+    case "userinfo":
+      content = <UserInfo />;
       break;
 
-    case "user2":
-      content = <User2 />;
+    case "personelinfo":
+      content = <PersonelInfo />;
+      break;
+
+    case "addressinfo":
+      content = <AddressInfo />;
+      break;
+
+    case "educationinfo":
+      content = <EducationInfo />;
+      break;
+
+    case "contactinfo":
+      content = <ContactInfo />;
       break;
 
     default:
-      content = <p>Waiting</p>;
+      content = <p>Waiting...</p>;
   }
 
   return (
@@ -203,17 +221,35 @@ export default function Header() {
         </div>
         <Divider />
         <List>
-          <ListItem button onClick={showUser}>
+          <ListItem button onClick={showUserInfo}>
             <ListItemIcon>
-              <Inbox />
+              <Person />
             </ListItemIcon>
             <ListItemText primary={"User"} />
           </ListItem>
-          <ListItem button onClick={showUser2}>
+          <ListItem button onClick={showPersonelInfo}>
             <ListItemIcon>
-              <Inbox />
+              <AssignmentInd />
             </ListItemIcon>
-            <ListItemText primary={"User2"} />
+            <ListItemText primary={"Personel"} />
+          </ListItem>
+          <ListItem button onClick={showAddressInfo}>
+            <ListItemIcon>
+              <PersonPinCircle />
+            </ListItemIcon>
+            <ListItemText primary={"Address"} />
+          </ListItem>
+          <ListItem button onClick={showEducationInfo}>
+            <ListItemIcon>
+              <School />
+            </ListItemIcon>
+            <ListItemText primary={"Education"} />
+          </ListItem>
+          <ListItem button onClick={showContactInfo}>
+            <ListItemIcon>
+              <ContactPhone />
+            </ListItemIcon>
+            <ListItemText primary={"Contact"} />
           </ListItem>
         </List>
       </Drawer>
