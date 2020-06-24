@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Grid, Typography, IconButton } from "@material-ui/core";
 import {
@@ -9,6 +9,7 @@ import {
   Language,
 } from "@material-ui/icons";
 import SendMail from "../SendMail";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,34 @@ const useStyles = makeStyles((theme) => ({
 
 const PersonelInfo = () => {
   const classes = useStyles();
+
+  const [getPersonelInfo, setGetPersonelInfo] = useState([]);
+
+  const getServices = () => {
+    var config = {
+      method: "get",
+      url:
+        "https://cors-anywhere.herokuapp.com/http://188.3.123.17:8000/sap/bc/zga_rest?sap-client=100&PERNR=1004&MERNI=72197527896&INFTY=0002",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+      },
+    };
+
+    Axios(config)
+      .then(function (response) {
+        console.log(response.data, "hoppa");
+        setGetPersonelInfo([...response.data]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
   return (
     <>
       <Paper className={classes.root} elevation={3}>
@@ -31,103 +60,113 @@ const PersonelInfo = () => {
               PERSONEL INFORMATION
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <AccountCircle style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+          {getPersonelInfo.map((item) => {
+            return (
+              <Grid item xs={12} key={Math.random()}>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <AccountCircle
+                      style={{ fontSize: "35px" }}
+                      color="primary"
+                    />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Adı Soyadı:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Adı Soyadı:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Furkan Cabbar
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Wc style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.ename}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Wc style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Cinsiyet:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Cinsiyet:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Erkek
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <CalendarToday style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.anrex}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <CalendarToday
+                      style={{ fontSize: "35px" }}
+                      color="primary"
+                    />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Doğum Tarihi:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Doğum Tarihi:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                02.09.1997
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <LocationOn style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.gbdat}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <LocationOn style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Doğum Yeri:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Doğum Yeri:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Istanbul/Bakırkoy
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Language style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.gbort}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Language style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Doğum Ülke:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Doğum Ülke:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Turkey
-              </Typography>
-            </div>
-          </Grid>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.landx}
+                  </Typography>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       </Paper>
       <SendMail />

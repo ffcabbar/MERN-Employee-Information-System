@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Grid, Typography, IconButton } from "@material-ui/core";
 import {
@@ -9,6 +9,7 @@ import {
   MarkunreadMailbox,
 } from "@material-ui/icons";
 import SendMail from "../SendMail";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,34 @@ const useStyles = makeStyles((theme) => ({
 
 const AddressInfo = () => {
   const classes = useStyles();
+
+  const [getAddressInfo, setGetAddressInfo] = useState([]);
+
+  const getServices = () => {
+    var config = {
+      method: "get",
+      url:
+        "https://cors-anywhere.herokuapp.com/http://188.3.123.17:8000/sap/bc/zga_rest?sap-client=100&PERNR=1004&MERNI=72197527896&INFTY=0006",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+      },
+    };
+
+    Axios(config)
+      .then(function (response) {
+        console.log(response.data, "hoppa");
+        setGetAddressInfo([...response.data]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
   return (
     <>
       <Paper className={classes.root} elevation={3}>
@@ -31,106 +60,110 @@ const AddressInfo = () => {
               ADDRESS INFORMATION
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Home style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+          {getAddressInfo.map((item) => {
+            return (
+              <Grid item xs={12} key={Math.random()}>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Home style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Address:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Address:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Hekimoglu Ali Pasa Cad. Seyyid omer mah. No/118
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Apartment style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.stras}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Apartment style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Apartment:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Apartment:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                8
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <MarkunreadMailbox
-                  style={{ fontSize: "35px" }}
-                  color="primary"
-                />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.locat}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <MarkunreadMailbox
+                      style={{ fontSize: "35px" }}
+                      color="primary"
+                    />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Zip Code:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Zip Code:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                34058
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <LocationOn style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.pstlz}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <LocationOn style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                City:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    City:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Istanbul/Bakırkoy
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Language style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.ort01}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Language style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Country:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Country:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                Turkey
-              </Typography>
-            </div>
-          </Grid>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.landx}
+                  </Typography>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       </Paper>
       <SendMail />

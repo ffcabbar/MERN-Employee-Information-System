@@ -17,8 +17,25 @@ import {
   ListItemText,
   Button,
 } from "@material-ui/core";
-import { Menu, ChevronLeft, ChevronRight, Person, AssignmentInd, PersonPinCircle, School, ContactPhone } from "@material-ui/icons";
-import {UserInfo,PersonelInfo,AddressInfo,EducationInfo,ContactInfo} from '../User/index'
+import {
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  Person,
+  AssignmentInd,
+  PersonPinCircle,
+  School,
+  ContactPhone,
+  EmojiObjects,
+} from "@material-ui/icons";
+import {
+  UserInfo,
+  PersonelInfo,
+  AddressInfo,
+  EducationInfo,
+  ContactInfo,
+  TaskInfo,
+} from "../User/index";
 
 const drawerWidth = 240;
 
@@ -128,6 +145,10 @@ export default function Header() {
     setShow("contactinfo");
   };
 
+  const showTaskInfo = () => {
+    setShow("taskinfo");
+  };
+
   let content = null;
 
   switch (show) {
@@ -149,6 +170,10 @@ export default function Header() {
 
     case "contactinfo":
       content = <ContactInfo />;
+      break;
+
+    case "taskinfo":
+      content = <TaskInfo />;
       break;
 
     default:
@@ -250,6 +275,12 @@ export default function Header() {
               <ContactPhone />
             </ListItemIcon>
             <ListItemText primary={"Contact"} />
+          </ListItem>
+          <ListItem button onClick={showTaskInfo}>
+            <ListItemIcon>
+              <EmojiObjects />
+            </ListItemIcon>
+            <ListItemText primary={"Tasks"} />
           </ListItem>
         </List>
       </Drawer>

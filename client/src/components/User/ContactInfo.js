@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Grid, Typography, IconButton } from "@material-ui/core";
 import { Phone, Email } from "@material-ui/icons";
 import SendMail from "../SendMail";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,6 +17,34 @@ const useStyles = makeStyles((theme) => ({
 
 const ContactInfo = () => {
   const classes = useStyles();
+
+  const [getContactInfo, setGetContactInfo] = useState([]);
+
+  const getServices = () => {
+    var config = {
+      method: "get",
+      url:
+        "https://cors-anywhere.herokuapp.com/http://188.3.123.17:8000/sap/bc/zga_rest?sap-client=100&PERNR=1004&MERNI=72197527896&INFTY=0105",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+      },
+    };
+
+    Axios(config)
+      .then(function (response) {
+        console.log(response.data, "hoppa");
+        setGetContactInfo([...response.data]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
   return (
     <>
       <Paper className={classes.root} elevation={3}>
@@ -25,46 +54,50 @@ const ContactInfo = () => {
               CONTACT INFORMATION
             </Typography>
           </Grid>
-          <Grid item xs={12}>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Phone style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+          {getContactInfo.map((item) => {
+            return (
+              <Grid item xs={12} key={Math.random()}>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Phone style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Phone:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Phone:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                +905348215356
-              </Typography>
-            </div>
-            <div>
-              <IconButton style={{ marginBottom: "5px" }}>
-                <Email style={{ fontSize: "35px" }} color="primary" />
-              </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.telnr}
+                  </Typography>
+                </div>
+                <div>
+                  <IconButton style={{ marginBottom: "5px" }}>
+                    <Email style={{ fontSize: "35px" }} color="primary" />
+                  </IconButton>
 
-              <Typography variant="h6" component="span" display="inline">
-                Mail:
-              </Typography>
+                  <Typography variant="h6" component="span" display="inline">
+                    Mail:
+                  </Typography>
 
-              <Typography
-                variant="h6"
-                component="span"
-                display="inline"
-                color="textSecondary"
-                className={classes.left}
-              >
-                ffcabbar@gmail.com
-              </Typography>
-            </div>
-          </Grid>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    display="inline"
+                    color="textSecondary"
+                    className={classes.left}
+                  >
+                    {item.mail}
+                  </Typography>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       </Paper>
       <SendMail />
