@@ -99,8 +99,8 @@ const UserInfo = () => {
                   ID: {item.pernr}
                 </Typography>
               }
-              title="Furkan Cabbar"
-              subheader="02.09.1997"
+              title={item.ename}
+              subheader={item.is_begda}
             />
             <Box>
               <IconButton>
@@ -116,11 +116,9 @@ const UserInfo = () => {
             </Box>
             <CardActions disableSpacing>
               <Box style={{ marginRight: "5px" }}>
-                <Typography>Istanbul,</Typography>
+                <Typography>{item.name1}</Typography>
               </Box>
-              <Box>
-                <Typography>Turkey</Typography>
-              </Box>
+
               <IconButton
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expanded,
