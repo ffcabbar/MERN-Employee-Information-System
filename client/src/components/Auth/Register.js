@@ -1,20 +1,24 @@
-import React, { useState, useContext } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import Axios from "axios";
-import UserContext from "../../context/UserContext";
+// import UserContext from "../../context/UserContext";
 import { useHistory } from "react-router-dom";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { LockOutlined } from "@material-ui/icons";
+import {
+  Snackbar,
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Grid,
+  Box,
+  Typography,
+  makeStyles,
+  Container,
+} from "@material-ui/core";
 
 const Copyright = () => {
   return (
@@ -65,8 +69,9 @@ const Register = () => {
   const [password, setPassword] = useState();
   const [passwordCheck, setPasswordCheck] = useState();
   const [displayName, setDisplayName] = useState();
+  const [alertOpen, setAlertOpen] = useState(false);
 
-  const { setUserData } = useContext(UserContext);
+  // const { setUserData } = useContext(UserContext);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -74,26 +79,43 @@ const Register = () => {
     const newUser = { email, password, passwordCheck, displayName };
     await Axios.post("http://localhost:5000/users/register", newUser);
 
-    const loginRes = await Axios.post("http://localhost:5000/users/login", {
-      email,
-      password,
-    });
+    // const loginRes = await Axios.post("http://localhost:5000/users/login", {
+    //   email,
+    //   password,
+    // });
 
-    setUserData({
-      token: loginRes.data.token,
-      user: loginRes.data.user,
-    });
+    // setUserData({
+    //   token: loginRes.data.token,
+    //   user: loginRes.data.user,
+    // });
 
-    localStorage.setItem("auth-token", loginRes.data.token);
-    history.push("/login");
+    // localStorage.setItem("auth-token", loginRes.data.token);
+    setAlertOpen(true);
+    setTimeout(() => {
+      history.push("/login");
+    },4000);
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={alertOpen}
+        autoHideDuration={4000}
+        onClose={() => setAlertOpen(false)}
+      >
+        <Alert severity="success">
+          <AlertTitle>Yönlendiriliyorsunuz...</AlertTitle>
+          Register işlemi başarılı
+        </Alert>
+      </Snackbar>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
           Register
