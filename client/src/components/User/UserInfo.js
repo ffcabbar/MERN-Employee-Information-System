@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserInfo = () => {
+const UserInfo = ({ perNo, tcNo }) => {
   const classes = useStyles();
 
   const [expanded, setExpanded] = useState(false);
@@ -56,30 +56,29 @@ const UserInfo = () => {
     setExpanded(!expanded);
   };
 
-  const getServices = () => {
-    var config = {
-      method: "get",
-      url:
-        "https://cors-anywhere.herokuapp.com/http://188.3.123.17:8000/sap/bc/zga_rest?sap-client=100&PERNR=1004&MERNI=72197527896&INFTY=0001",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
-      },
+  useEffect(() => {
+    const getServices = () => {
+      var config = {
+        method: "get",
+        url: `https://cors-anywhere.herokuapp.com/http://188.3.123.17:8000/sap/bc/zga_rest?sap-client=100&PERNR=${perNo}&MERNI=${tcNo}&INFTY=0001`,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+        },
+      };
+
+      Axios(config)
+        .then(function (response) {
+          console.log(response.data, "hoppa");
+          setGetUserInfo([...response.data]);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     };
 
-    Axios(config)
-      .then(function (response) {
-        console.log(response.data, "hoppa");
-        setGetUserInfo([...response.data]);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
     getServices();
-  }, []);
+  }, [perNo, tcNo]);
 
   return (
     <>

@@ -35,6 +35,7 @@ import {
   EducationInfo,
   ContactInfo,
   TaskInfo,
+  EmployeeQuery,
 } from "../User/index";
 
 const drawerWidth = 240;
@@ -106,6 +107,13 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(null);
 
+  // For props
+  const [empQuery, setEmpQuery] = useState();
+  const [perNo, setPerNo] = useState();
+  const [tcNo, setTCNo] = useState();
+
+  console.log(empQuery, "Props geliyor mu?");
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -149,27 +157,43 @@ export default function Header() {
     setShow("taskinfo");
   };
 
+  const employeeQuery = () => {
+    setShow("employeequery");
+  };
+
   let content = null;
 
   switch (show) {
+    case "employeequery":
+      content = (
+        <EmployeeQuery
+          setEmpQuery={setEmpQuery}
+          perNo={perNo}
+          setPerNo={setPerNo}
+          tcNo={tcNo}
+          setTCNo={setTCNo}
+        />
+      );
+      break;
+
     case "userinfo":
-      content = <UserInfo />;
+      content = <UserInfo perNo={perNo} tcNo={tcNo} />;
       break;
 
     case "personelinfo":
-      content = <PersonelInfo />;
+      content = <PersonelInfo perNo={perNo} tcNo={tcNo} />;
       break;
 
     case "addressinfo":
-      content = <AddressInfo />;
+      content = <AddressInfo perNo={perNo} tcNo={tcNo} />;
       break;
 
     case "educationinfo":
-      content = <EducationInfo />;
+      content = <EducationInfo perNo={perNo} tcNo={tcNo} />;
       break;
 
     case "contactinfo":
-      content = <ContactInfo />;
+      content = <ContactInfo perNo={perNo} tcNo={tcNo} />;
       break;
 
     case "taskinfo":
@@ -246,42 +270,52 @@ export default function Header() {
         </div>
         <Divider />
         <List>
-          <ListItem button onClick={showUserInfo}>
+          <ListItem button onClick={employeeQuery}>
             <ListItemIcon>
               <Person />
             </ListItemIcon>
-            <ListItemText primary={"User"} />
+            <ListItemText primary={"Employee Query"} />
           </ListItem>
-          <ListItem button onClick={showPersonelInfo}>
-            <ListItemIcon>
-              <AssignmentInd />
-            </ListItemIcon>
-            <ListItemText primary={"Personel"} />
-          </ListItem>
-          <ListItem button onClick={showAddressInfo}>
-            <ListItemIcon>
-              <PersonPinCircle />
-            </ListItemIcon>
-            <ListItemText primary={"Address"} />
-          </ListItem>
-          <ListItem button onClick={showEducationInfo}>
-            <ListItemIcon>
-              <School />
-            </ListItemIcon>
-            <ListItemText primary={"Education"} />
-          </ListItem>
-          <ListItem button onClick={showContactInfo}>
-            <ListItemIcon>
-              <ContactPhone />
-            </ListItemIcon>
-            <ListItemText primary={"Contact"} />
-          </ListItem>
-          <ListItem button onClick={showTaskInfo}>
-            <ListItemIcon>
-              <EmojiObjects />
-            </ListItemIcon>
-            <ListItemText primary={"Tasks"} />
-          </ListItem>
+          {empQuery === "S" ? (
+            <>
+              <ListItem button onClick={showUserInfo}>
+                <ListItemIcon>
+                  <Person />
+                </ListItemIcon>
+                <ListItemText primary={"User"} />
+              </ListItem>
+              <ListItem button onClick={showPersonelInfo}>
+                <ListItemIcon>
+                  <AssignmentInd />
+                </ListItemIcon>
+                <ListItemText primary={"Personel"} />
+              </ListItem>
+              <ListItem button onClick={showAddressInfo}>
+                <ListItemIcon>
+                  <PersonPinCircle />
+                </ListItemIcon>
+                <ListItemText primary={"Address"} />
+              </ListItem>
+              <ListItem button onClick={showEducationInfo}>
+                <ListItemIcon>
+                  <School />
+                </ListItemIcon>
+                <ListItemText primary={"Education"} />
+              </ListItem>
+              <ListItem button onClick={showContactInfo}>
+                <ListItemIcon>
+                  <ContactPhone />
+                </ListItemIcon>
+                <ListItemText primary={"Contact"} />
+              </ListItem>
+              <ListItem button onClick={showTaskInfo}>
+                <ListItemIcon>
+                  <EmojiObjects />
+                </ListItemIcon>
+                <ListItemText primary={"Tasks"} />
+              </ListItem>
+            </>
+          ) : null}
         </List>
       </Drawer>
       <main

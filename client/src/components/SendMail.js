@@ -17,8 +17,6 @@ const SendMail = () => {
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    // console.log(e.target.id, "hayda");
-
     if (e.target.id === "name") {
       setName(e.target.value);
     } else if (e.target.id === "email") {
