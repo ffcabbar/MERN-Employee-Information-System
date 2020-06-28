@@ -25,7 +25,7 @@ app.post("/api/form", (req, res) => {
 
   // Step 2
   let mailOptions = {
-    from: "ffcabbar@gmail.com",
+    from: "empinfosystem@gmail.com",
     to: req.body.email,
     subject: "Testing from FURKAN",
     text: req.body.message,

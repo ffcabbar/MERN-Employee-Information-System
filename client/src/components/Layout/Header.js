@@ -229,7 +229,7 @@ export default function Header() {
 
           <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ textDecoration: "none", color: "#fff" }}>
-              Furkan
+              Employee Information System
             </Link>
           </Typography>
           {userData.user ? (

@@ -1,7 +1,8 @@
-import React from "react";
-import { Paper, TextField, Button } from "@material-ui/core";
+import React, { useState } from "react";
+import { Paper, TextField, Button, Snackbar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Axios from "axios";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
 
 const EmployeeQuery = ({ setEmpQuery, perNo, setPerNo, tcNo, setTCNo }) => {
   const classes = useStyles();
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertOpenForError, setAlertOpenForError] = useState(false);
 
   const handleChange = (e) => {
     if (e.target.id === "per") {
@@ -34,6 +38,13 @@ const EmployeeQuery = ({ setEmpQuery, perNo, setPerNo, tcNo, setTCNo }) => {
       .then(function (response) {
         console.log(response.data, "hoppa");
         setEmpQuery(...response.data);
+        // setControl(...response.data);
+        if (response.data === "S") {
+          setAlertOpen(true);
+        }
+        if (response.data === "E") {
+          setAlertOpenForError(true);
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -47,6 +58,43 @@ const EmployeeQuery = ({ setEmpQuery, perNo, setPerNo, tcNo, setTCNo }) => {
 
   return (
     <>
+      {alertOpen === true ? (
+        <Snackbar
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={alertOpen}
+          autoHideDuration={4000}
+          onClose={() => setAlertOpen(false)}
+        >
+          <Alert severity="success">
+            <AlertTitle>
+              Giriş Başarılı. Çalışanın bilgileri getirildi.
+            </AlertTitle>
+          </Alert>
+        </Snackbar>
+      ) : null}
+
+      {alertOpenForError === true ? (
+        <Snackbar
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={alertOpenForError}
+          autoHideDuration={4000}
+          onClose={() => setAlertOpenForError(false)}
+        >
+          <Alert severity="error">
+            <AlertTitle>
+              Böyle bir kullanıcı yok. Lütfen numaraları doğru girdiğinizden
+              emin olunuz.
+            </AlertTitle>
+          </Alert>
+        </Snackbar>
+      ) : null}
+
       <Paper className={classes.root} elevation={3}>
         <form onSubmit={submit} noValidate>
           <TextField
