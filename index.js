@@ -36,7 +36,7 @@ app.post("/api/form", (req, res) => {
     if (err) {
       console.log("Mail Hatası", err);
     } else {
-      console.log("Email gönderildi kanka");
+      console.log("Email gönderildi");
     }
   });
 });

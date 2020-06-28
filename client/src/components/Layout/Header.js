@@ -23,10 +23,11 @@ import {
   ChevronRight,
   Person,
   AssignmentInd,
-  PersonPinCircle,
   School,
   ContactPhone,
   EmojiObjects,
+  VpnKey,
+  MyLocation,
 } from "@material-ui/icons";
 import {
   UserInfo,
@@ -201,7 +202,7 @@ export default function Header() {
       break;
 
     default:
-      content = <p>Waiting...</p>;
+      content = <h3>Please query the employee you want to see by typing perNo and tcNo from the menu on the left...</h3>;
   }
 
   return (
@@ -272,7 +273,7 @@ export default function Header() {
         <List>
           <ListItem button onClick={employeeQuery}>
             <ListItemIcon>
-              <Person />
+              <VpnKey />
             </ListItemIcon>
             <ListItemText primary={"Employee Query"} />
           </ListItem>
@@ -292,7 +293,7 @@ export default function Header() {
               </ListItem>
               <ListItem button onClick={showAddressInfo}>
                 <ListItemIcon>
-                  <PersonPinCircle />
+                  <MyLocation />
                 </ListItemIcon>
                 <ListItemText primary={"Address"} />
               </ListItem>

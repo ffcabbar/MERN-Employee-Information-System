@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Grid, Typography, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Grid,
+  Typography,
+  IconButton,
+  LinearProgress,
+} from "@material-ui/core";
 import {
   Language,
   DoneAll,
@@ -23,10 +29,14 @@ const useStyles = makeStyles((theme) => ({
 
 const EducationInfo = ({ perNo, tcNo }) => {
   const classes = useStyles();
+
   const [getEducationInfo, setGetEducationInfo] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getServices = () => {
+      setLoading(true);
+
       var config = {
         method: "get",
         url: `https://cors-anywhere.herokuapp.com/http://188.3.123.17:8000/sap/bc/zga_rest?sap-client=100&PERNR=${perNo}&MERNI=${tcNo}&INFTY=0022`,
@@ -40,9 +50,11 @@ const EducationInfo = ({ perNo, tcNo }) => {
         .then(function (response) {
           console.log(response.data, "hoppa");
           setGetEducationInfo([...response.data]);
+          setLoading(false);
         })
         .catch(function (error) {
           console.log(error);
+          setLoading(false);
         });
     };
 
@@ -51,119 +63,124 @@ const EducationInfo = ({ perNo, tcNo }) => {
 
   return (
     <>
-      <Paper className={classes.root} elevation={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h4" style={{ textAlign: "center" }}>
-              EDUCATION INFORMATION
-            </Typography>
+      {loading ? (
+        <LinearProgress color="secondary" style={{ marginBottom: "15px" }} />
+      ) : (
+        <Paper className={classes.root} elevation={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h4" style={{ textAlign: "center" }}>
+                EDUCATION INFORMATION
+              </Typography>
+            </Grid>
+            {getEducationInfo.map((item) => {
+              return (
+                <Grid item xs={12} key={Math.random()}>
+                  <div>
+                    <IconButton style={{ marginBottom: "5px" }}>
+                      <School style={{ fontSize: "35px" }} color="primary" />
+                    </IconButton>
+
+                    <Typography variant="h6" component="span" display="inline">
+                      University:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      display="inline"
+                      color="textSecondary"
+                      className={classes.left}
+                    >
+                      {item.insti}
+                    </Typography>
+                  </div>
+                  <div>
+                    <IconButton style={{ marginBottom: "5px" }}>
+                      <Language style={{ fontSize: "35px" }} color="primary" />
+                    </IconButton>
+
+                    <Typography variant="h6" component="span" display="inline">
+                      Country:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      display="inline"
+                      color="textSecondary"
+                      className={classes.left}
+                    >
+                      {item.landx}
+                    </Typography>
+                  </div>
+                  <div>
+                    <IconButton style={{ marginBottom: "5px" }}>
+                      <DoneAll style={{ fontSize: "35px" }} color="primary" />
+                    </IconButton>
+
+                    <Typography variant="h6" component="span" display="inline">
+                      Status:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      display="inline"
+                      color="textSecondary"
+                      className={classes.left}
+                    >
+                      {item.satxt}
+                    </Typography>
+                  </div>
+                  <div>
+                    <IconButton style={{ marginBottom: "5px" }}>
+                      <ViewHeadline
+                        style={{ fontSize: "35px" }}
+                        color="primary"
+                      />
+                    </IconButton>
+
+                    <Typography variant="h6" component="span" display="inline">
+                      Department:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      display="inline"
+                      color="textSecondary"
+                      className={classes.left}
+                    >
+                      {item.frtxt}
+                    </Typography>
+                  </div>
+                  <div>
+                    <IconButton style={{ marginBottom: "5px" }}>
+                      <Score style={{ fontSize: "35px" }} color="primary" />
+                    </IconButton>
+
+                    <Typography variant="h6" component="span" display="inline">
+                      Gpa:
+                    </Typography>
+
+                    <Typography
+                      variant="h6"
+                      component="span"
+                      display="inline"
+                      color="textSecondary"
+                      className={classes.left}
+                    >
+                      {item.emark}
+                    </Typography>
+                  </div>
+                </Grid>
+              );
+            })}
           </Grid>
-          {getEducationInfo.map((item) => {
-            return (
-              <Grid item xs={12} key={Math.random()}>
-                <div>
-                  <IconButton style={{ marginBottom: "5px" }}>
-                    <School style={{ fontSize: "35px" }} color="primary" />
-                  </IconButton>
+        </Paper>
+      )}
 
-                  <Typography variant="h6" component="span" display="inline">
-                    University:
-                  </Typography>
-
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    display="inline"
-                    color="textSecondary"
-                    className={classes.left}
-                  >
-                    {item.insti}
-                  </Typography>
-                </div>
-                <div>
-                  <IconButton style={{ marginBottom: "5px" }}>
-                    <Language style={{ fontSize: "35px" }} color="primary" />
-                  </IconButton>
-
-                  <Typography variant="h6" component="span" display="inline">
-                    Country:
-                  </Typography>
-
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    display="inline"
-                    color="textSecondary"
-                    className={classes.left}
-                  >
-                    {item.landx}
-                  </Typography>
-                </div>
-                <div>
-                  <IconButton style={{ marginBottom: "5px" }}>
-                    <DoneAll style={{ fontSize: "35px" }} color="primary" />
-                  </IconButton>
-
-                  <Typography variant="h6" component="span" display="inline">
-                    Status:
-                  </Typography>
-
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    display="inline"
-                    color="textSecondary"
-                    className={classes.left}
-                  >
-                    {item.satxt}
-                  </Typography>
-                </div>
-                <div>
-                  <IconButton style={{ marginBottom: "5px" }}>
-                    <ViewHeadline
-                      style={{ fontSize: "35px" }}
-                      color="primary"
-                    />
-                  </IconButton>
-
-                  <Typography variant="h6" component="span" display="inline">
-                    Department:
-                  </Typography>
-
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    display="inline"
-                    color="textSecondary"
-                    className={classes.left}
-                  >
-                    {item.frtxt}
-                  </Typography>
-                </div>
-                <div>
-                  <IconButton style={{ marginBottom: "5px" }}>
-                    <Score style={{ fontSize: "35px" }} color="primary" />
-                  </IconButton>
-
-                  <Typography variant="h6" component="span" display="inline">
-                    Gpa:
-                  </Typography>
-
-                  <Typography
-                    variant="h6"
-                    component="span"
-                    display="inline"
-                    color="textSecondary"
-                    className={classes.left}
-                  >
-                    {item.emark}
-                  </Typography>
-                </div>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Paper>
       <SendMail />
     </>
   );
